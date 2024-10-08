@@ -29,16 +29,21 @@ package edu.fxdemo.supermarketfx.model;
 
 import edu.fxdemo.supermarketfx.db.DBConnection;
 import edu.fxdemo.supermarketfx.dto.CustomerDto;
+import edu.fxdemo.supermarketfx.dto.TM.CustomerTM;
 
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.ArrayList;
+
+//import static edu.fxdemo.supermarketfx.controller.cust_con.CUSTOMER_MODEL;
 
 public class CustomerModel {
 
 
+    private static final CustomerModel CUSTOMER_MODEL = new CustomerModel();
 
     public String getNextCustomerId() throws SQLException {
 
@@ -70,5 +75,29 @@ public class CustomerModel {
         boolean isSaved = result>0;
         return isSaved;
     }
+    public ArrayList<CustomerTM> getAllCustomer() throws SQLException, ClassNotFoundException {
+        Connection connection = DBConnection.getInstance().getConnection();
+        String sql = "SELECT * FROM customer";
+        PreparedStatement statement = connection.prepareStatement(sql);
+
+        ResultSet rst = statement.executeQuery();
+        ArrayList<CustomerTM> customerTMs = new ArrayList<>(); // Use CustomerTM instead of CustomerDto
+
+        while (rst.next()) {
+            // Create CustomerTM object and set its fields based on ResultSet data
+            CustomerTM customerTM = new CustomerTM();
+            customerTM.setCustId(rst.getString("customer_id"));
+            customerTM.setCustName(rst.getString("name"));
+            customerTM.setCustNic(rst.getString("nic"));
+            customerTM.setCustEmail(rst.getString("email"));
+            customerTM.setCustPhone(rst.getString("phone"));
+
+            // Add the CustomerTM object to the list
+            customerTMs.add(customerTM);
+        }
+        return customerTMs;
+    }
+
+
 
 }

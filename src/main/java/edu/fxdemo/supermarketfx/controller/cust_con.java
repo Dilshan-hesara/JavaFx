@@ -43,9 +43,12 @@ import javafx.event.ActionEvent;
 
 import java.net.URL;
 import java.sql.SQLException;
+import java.util.ArrayList;
 import java.util.ResourceBundle;
 
 public class cust_con implements Initializable {
+
+    private static final CustomerModel CUSTOMER_MODEL = new CustomerModel();
 
     @FXML
     private TableColumn<CustomerTM, Integer> col_id;
@@ -83,6 +86,7 @@ public class cust_con implements Initializable {
     @FXML
     private TextField txtmail;
 
+    private ObservableList<CustomerTM> customerList = FXCollections.observableArrayList();
 
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
@@ -93,13 +97,23 @@ public class cust_con implements Initializable {
         col_mail.setCellValueFactory(new PropertyValueFactory<>("custEmail"));
         col_phone.setCellValueFactory(new PropertyValueFactory<>("custPhone"));
 
-        // Load the next customer ID during initialization
         try {
             loadNextCustomerId();
+            loadCustomerTable();
         } catch (Exception e) {
             e.printStackTrace();
+            new Alert(Alert.AlertType.ERROR, "Fail to load customer data").show();
+        }
+    }
 
-            new Alert(Alert.AlertType.ERROR, "Fail to load customer id").show();
+    public void loadCustomerTable() {
+        try {
+            ArrayList<CustomerTM> customerTMs = CUSTOMER_MODEL.getAllCustomer();
+            customerList.clear();
+            customerList.addAll(customerTMs);
+            ctable.setItems(customerList);
+        } catch (Exception e) {
+            new Alert(Alert.AlertType.ERROR, "Error loading customer data: " + e.getMessage()).show();
         }
     }
 
@@ -125,16 +139,17 @@ public class cust_con implements Initializable {
                 email,
                 phone
         );
-        boolean isSaved =  customerModel.saveCustomer(customerDTO);
-        if(isSaved){
+        boolean isSaved = customerModel.saveCustomer(customerDTO);
+        if (isSaved) {
             loadNextCustomerId();
             txtname.setText("");
             txtnic.setText("");
             txtmail.setText("");
             txtphone.setText("");
-            new Alert(Alert.AlertType.INFORMATION,"Customer saved...!").show();
-        }else{
-            new Alert(Alert.AlertType.ERROR,"Fail to save customer...!").show();
+            loadCustomerTable();
+            new Alert(Alert.AlertType.INFORMATION, "Customer saved...!").show();
+        } else {
+            new Alert(Alert.AlertType.ERROR, "Fail to save customer...!").show();
         }
     }
 }
