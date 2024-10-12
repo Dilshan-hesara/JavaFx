@@ -40,7 +40,7 @@ public class Appinizelizer extends Application {
     @Override
     public void start(Stage stage) throws Exception {
 
-        Parent root = FXMLLoader.load(Objects.requireNonNull(getClass().getResource("/view/loging.fxml")));
+        Parent root = FXMLLoader.load(Objects.requireNonNull(getClass().getResource("/view/page1.fxml")));
         Scene scene = new Scene(root, 600, 400);
         stage.setScene(scene);
 

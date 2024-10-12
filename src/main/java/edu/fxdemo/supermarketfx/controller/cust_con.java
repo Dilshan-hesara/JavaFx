@@ -41,6 +41,7 @@ import javafx.scene.control.TextField;
 import javafx.scene.control.Label;
 import javafx.event.ActionEvent;
 
+import javafx.scene.input.MouseEvent;
 import java.net.URL;
 import java.sql.SQLException;
 import java.util.ArrayList;
@@ -65,8 +66,8 @@ public class cust_con implements Initializable {
     @FXML
     private TableColumn<CustomerTM, String> col_phone;
 
-    @FXML
-    private TableColumn<CustomerTM, String> col_add;
+   // @FXML
+   // private TableColumn<CustomerTM, String> col_add;
 
     @FXML
     private TableView<CustomerTM> ctable;
@@ -91,7 +92,7 @@ public class cust_con implements Initializable {
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
         col_id.setCellValueFactory(new PropertyValueFactory<>("custId"));
-        col_add.setCellValueFactory(new PropertyValueFactory<>("custAddress"));
+      //  col_add.setCellValueFactory(new PropertyValueFactory<>("custAddress"));
         col_name.setCellValueFactory(new PropertyValueFactory<>("custName"));
         col_nic.setCellValueFactory(new PropertyValueFactory<>("custNic"));
         col_mail.setCellValueFactory(new PropertyValueFactory<>("custEmail"));
@@ -152,4 +153,16 @@ public class cust_con implements Initializable {
             new Alert(Alert.AlertType.ERROR, "Fail to save customer...!").show();
         }
     }
+    @FXML
+    void tableClic(MouseEvent event) {
+
+      CustomerTM customerTM = ctable.getSelectionModel().getSelectedItem();
+      if (customerTM != null) {
+
+      }
+    }
+
+
+
+
 }

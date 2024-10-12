@@ -30,6 +30,7 @@ package edu.fxdemo.supermarketfx.model;
 import edu.fxdemo.supermarketfx.db.DBConnection;
 import edu.fxdemo.supermarketfx.dto.CustomerDto;
 import edu.fxdemo.supermarketfx.dto.TM.CustomerTM;
+import edu.fxdemo.supermarketfx.util.CrudUtil;
 
 
 import java.sql.Connection;
@@ -47,11 +48,12 @@ public class CustomerModel {
 
     public String getNextCustomerId() throws SQLException {
 
-        Connection connection = DBConnection.getInstance().getConnection();
+      /*  Connection connection = DBConnection.getInstance().getConnection();
         String sql = "select customer_id from customer order by customer_id desc limit 1";
         PreparedStatement pst = connection.prepareStatement(sql);
-        ResultSet rst = pst.executeQuery();
+        ResultSet rst = pst.executeQuery(); */
 
+        ResultSet rst = CrudUtil.execute("select customer_id from customer order by customer_id desc limit 1");
         if (rst.next()){
             String lastId = rst.getString(1); // C002
             String substring = lastId.substring(1); // 002
@@ -64,7 +66,7 @@ public class CustomerModel {
     }
     public boolean saveCustomer(CustomerDto customerDTO) throws SQLException {
         Connection connection = DBConnection.getInstance().getConnection();
-        String sql = "insert into customer values (?,?,?,?,?)";
+    /*    String sql = "insert into customer values (?,?,?,?,?)";
         PreparedStatement pst = connection.prepareStatement(sql);
         pst.setObject(1,customerDTO.getCustomerId());
         pst.setObject(2,customerDTO.getName());
@@ -72,10 +74,22 @@ public class CustomerModel {
         pst.setObject(4,customerDTO.getEmail());
         pst.setObject(5,customerDTO.getPhone());
         int result = pst.executeUpdate();
-        boolean isSaved = result>0;
+        boolean isSaved = result>0;*/
+        boolean isSaved =  CrudUtil.execute(
+                "insert into customer values (?,?,?,?,?)",
+                customerDTO.getCustomerId(),
+                customerDTO.getName(),
+                customerDTO.getNic(),
+                customerDTO.getEmail(),
+                customerDTO.getPhone()
+        );
         return isSaved;
     }
-    public ArrayList<CustomerTM> getAllCustomer() throws SQLException, ClassNotFoundException {
+
+
+
+
+   public ArrayList<CustomerTM> getAllCustomer() throws SQLException, ClassNotFoundException {
         Connection connection = DBConnection.getInstance().getConnection();
         String sql = "SELECT * FROM customer";
         PreparedStatement statement = connection.prepareStatement(sql);
@@ -97,6 +111,7 @@ public class CustomerModel {
         }
         return customerTMs;
     }
+
 
 
 
