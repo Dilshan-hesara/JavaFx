@@ -13,11 +13,9 @@ public class CustomerTM {
 
     private String custId;
     private String custName;
-    private String custAddress;
     private String custPhone;
     private String custEmail;
     private String custNic;
-
 
 
 }

@@ -46,7 +46,7 @@ import java.net.URL;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.ResourceBundle;
-
+import edu.fxdemo.supermarketfx.dto.CustomerDto;
 public class cust_con implements Initializable {
 
     private static final CustomerModel CUSTOMER_MODEL = new CustomerModel();
@@ -107,16 +107,8 @@ public class cust_con implements Initializable {
         }
     }
 
-    public void loadCustomerTable() {
-        try {
-            ArrayList<CustomerTM> customerTMs = CUSTOMER_MODEL.getAllCustomer();
-            customerList.clear();
-            customerList.addAll(customerTMs);
-            ctable.setItems(customerList);
-        } catch (Exception e) {
-            new Alert(Alert.AlertType.ERROR, "Error loading customer data: " + e.getMessage()).show();
-        }
-    }
+
+
 
     CustomerModel customerModel = new CustomerModel();
 
@@ -163,6 +155,35 @@ public class cust_con implements Initializable {
     }
 
 
+    private void loadCustomerTable() throws SQLException {
+        ArrayList<CustomerDto> customerDTOS = customerModel.getAllCustomers();
 
+        ObservableList<CustomerTM> customerTMS = FXCollections.observableArrayList();
+
+//        ObservableList<CustomerTM> customerTMS = FXCollections.observableArrayList();
+//        customerTMS.addAll(customerModel.getAllCustomer().stream().map(customerDTO->{
+//            return new CustomerTM(
+//                    customerDTO.getId(),
+//                    customerDTO.getName(),
+//                    customerDTO.getNic(),
+//                    customerDTO.getEmail(),
+//                    customerDTO.getPhone()
+//            );
+//        }).collect(Collectors.toList()));
+//        tblCustomer.setItems(customerTMS);
+
+        for (CustomerDto customerDto : customerDTOS) {
+            CustomerTM customerTM = new CustomerTM(
+                    customerDto.getCustomerId(),
+                    customerDto.getName(),
+                    customerDto.getNic(),
+                    customerDto.getEmail(),
+                    customerDto.getPhone()
+            );
+            customerTMS.add(customerTM);
+        }
+
+        ctable.setItems(customerTMS);
+    }
 
 }

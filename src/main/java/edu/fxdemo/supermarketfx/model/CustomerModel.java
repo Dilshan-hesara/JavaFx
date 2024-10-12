@@ -87,31 +87,23 @@ public class CustomerModel {
     }
 
 
+    public ArrayList<CustomerDto> getAllCustomers() throws SQLException {
+        ResultSet rst = CrudUtil.execute("select * from customer");
 
-
-   public ArrayList<CustomerTM> getAllCustomer() throws SQLException, ClassNotFoundException {
-        Connection connection = DBConnection.getInstance().getConnection();
-        String sql = "SELECT * FROM customer";
-        PreparedStatement statement = connection.prepareStatement(sql);
-
-        ResultSet rst = statement.executeQuery();
-        ArrayList<CustomerTM> customerTMs = new ArrayList<>(); // Use CustomerTM instead of CustomerDto
+        ArrayList<CustomerDto> customerDTOS = new ArrayList<>();
 
         while (rst.next()) {
-            // Create CustomerTM object and set its fields based on ResultSet data
-            CustomerTM customerTM = new CustomerTM();
-            customerTM.setCustId(rst.getString("customer_id"));
-            customerTM.setCustName(rst.getString("name"));
-            customerTM.setCustNic(rst.getString("nic"));
-            customerTM.setCustEmail(rst.getString("email"));
-            customerTM.setCustPhone(rst.getString("phone"));
-
-            // Add the CustomerTM object to the list
-            customerTMs.add(customerTM);
+            CustomerDto customerDTO = new CustomerDto(
+                    rst.getString(1),  // Customer ID
+                    rst.getString(2),  // Name
+                    rst.getString(3),  // NIC
+                    rst.getString(4),  // Email
+                    rst.getString(5)   // Phone
+            );
+            customerDTOS.add(customerDTO);
         }
-        return customerTMs;
+        return customerDTOS;
     }
-
 
 
 
