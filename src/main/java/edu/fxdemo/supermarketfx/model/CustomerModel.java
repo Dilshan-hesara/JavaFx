@@ -112,4 +112,16 @@ public class CustomerModel {
         return CrudUtil.execute("delete from customer where customer_id=?", customerId);
 
     }
+
+    public boolean updateCustomer(CustomerDto customerDTO) throws SQLException {
+
+        return CrudUtil.execute(
+                "update customer set name=?, nic=?, email=?, phone=? where customer_id=?",
+                customerDTO.getName(),
+                customerDTO.getNic(),
+                customerDTO.getEmail(),
+                customerDTO.getPhone(),
+                customerDTO.getCustomerId()
+        );
+    }
 }

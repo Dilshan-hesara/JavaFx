@@ -200,8 +200,29 @@ public class customer_con implements Initializable {
 
 
     @FXML
-    void updateButtn(ActionEvent event) {
+    void updateButtn(ActionEvent event) throws SQLException {
 
+        String customerId = txtid.getText();
+        String name = txtname.getText();
+        String nic = txtnic.getText();
+        String email = txtmail.getText();
+        String phone = txtphone.getText();
+
+        CustomerDto customerDTO = new CustomerDto(
+                customerId,
+                name,
+                nic,
+                email,
+                phone
+        );
+
+        boolean isUpdate = customerModel.updateCustomer(customerDTO);
+        if (isUpdate) {
+          //  refreshPage();
+            new Alert(Alert.AlertType.INFORMATION, "Customer update...!").show();
+        } else {
+            new Alert(Alert.AlertType.ERROR, "Fail to update customer...!").show();
+        }
     }
 
 
