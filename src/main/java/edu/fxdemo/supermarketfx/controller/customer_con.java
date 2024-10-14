@@ -15,6 +15,7 @@ import javafx.scene.input.MouseEvent;
 import java.net.URL;
 import java.sql.SQLException;
 import java.util.ArrayList;
+import java.util.Optional;
 import java.util.ResourceBundle;
 
 public class customer_con implements Initializable {
@@ -41,7 +42,16 @@ public class customer_con implements Initializable {
     private Button saveButt;
 
     @FXML
+    private Button deleteButt;
+
+    @FXML
+    private Button resetButt;
+
+    @FXML
     private Label txtid;
+
+    @FXML
+    private Button updateButt;
 
     @FXML
     private TextField txtmail;
@@ -97,8 +107,8 @@ public class customer_con implements Initializable {
 
             saveButt.setDisable(true);
 
-         //   btnDelete.setDisable(false);
-         //   btnUpdate.setDisable(false);
+               deleteButt.setDisable(false);
+               updateButt.setDisable(false);
         }
 
     }
@@ -162,7 +172,37 @@ public class customer_con implements Initializable {
         ctable.setItems(customerTMS);
     }
 
+    @FXML
+    void deleteButt(ActionEvent event) throws SQLException {
 
+        String customerId = txtid.getText();
+
+        Alert alert = new Alert(Alert.AlertType.CONFIRMATION, "Are you sure?", ButtonType.YES, ButtonType.NO);
+        Optional<ButtonType> optionalButtonType = alert.showAndWait();
+
+        if (optionalButtonType.isPresent() && optionalButtonType.get() == ButtonType.YES) {
+
+            boolean isDeleted = customerModel.deleteCustomer(customerId);
+            if (isDeleted) {
+             //   refreshPage();
+                new Alert(Alert.AlertType.INFORMATION, "Customer deleted...!").show();
+            } else {
+                new Alert(Alert.AlertType.ERROR, "Fail to delete customer...!").show();
+            }
+        }
+    }
+
+    @FXML
+    void resetButt(ActionEvent event) {
+
+    }
+
+
+
+    @FXML
+    void updateButtn(ActionEvent event) {
+
+    }
 
 
 }

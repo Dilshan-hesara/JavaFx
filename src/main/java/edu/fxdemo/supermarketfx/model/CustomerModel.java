@@ -108,5 +108,8 @@ public class CustomerModel {
     }
 
 
+    public boolean deleteCustomer(String customerId) throws SQLException {
+        return CrudUtil.execute("delete from customer where customer_id=?", customerId);
 
+    }
 }
