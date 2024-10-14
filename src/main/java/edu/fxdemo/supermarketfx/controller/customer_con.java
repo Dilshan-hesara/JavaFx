@@ -184,7 +184,7 @@ public class customer_con implements Initializable {
 
             boolean isDeleted = customerModel.deleteCustomer(customerId);
             if (isDeleted) {
-             //   refreshPage();
+             refreshPage();
                 new Alert(Alert.AlertType.INFORMATION, "Customer deleted...!").show();
             } else {
                 new Alert(Alert.AlertType.ERROR, "Fail to delete customer...!").show();
@@ -192,10 +192,6 @@ public class customer_con implements Initializable {
         }
     }
 
-    @FXML
-    void resetButt(ActionEvent event) {
-
-    }
 
 
 
@@ -218,12 +214,33 @@ public class customer_con implements Initializable {
 
         boolean isUpdate = customerModel.updateCustomer(customerDTO);
         if (isUpdate) {
-          //  refreshPage();
+            refreshPage();
             new Alert(Alert.AlertType.INFORMATION, "Customer update...!").show();
         } else {
             new Alert(Alert.AlertType.ERROR, "Fail to update customer...!").show();
         }
     }
 
+    @FXML
+    void resetButt(ActionEvent event) throws SQLException {
+
+        refreshPage();
+
+    }
+
+    private void refreshPage() throws SQLException {
+        loadNextCustomerId();
+        loadCustomerTable();
+
+        saveButt.setDisable(false);
+
+        updateButt.setDisable(true);
+        deleteButt.setDisable(true);
+
+        txtname.setText("");
+        txtnic.setText("");
+        txtmail.setText("");
+        txtphone.setText("");
+    }
 
 }
