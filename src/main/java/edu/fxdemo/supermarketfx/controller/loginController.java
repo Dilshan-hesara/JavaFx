@@ -9,7 +9,7 @@ import javafx.scene.layout.AnchorPane;
 
 import java.io.IOException;
 
-public class loginCon {
+public class loginController {
 
     @FXML
     private AnchorPane aclog;

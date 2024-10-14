@@ -18,7 +18,7 @@ import java.util.ArrayList;
 import java.util.Optional;
 import java.util.ResourceBundle;
 
-public class customer_con implements Initializable {
+public class customerController implements Initializable {
 
     @FXML
     private TableColumn<?, ?> col_id;

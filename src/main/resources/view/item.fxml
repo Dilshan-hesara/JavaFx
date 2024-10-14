@@ -5,7 +5,7 @@
 <?import javafx.scene.text.Font?>
 
 
-<AnchorPane prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/22" xmlns:fx="http://javafx.com/fxml/1" fx:controller="edu.fxdemo.supermarketfx.controller.it_co">
+<AnchorPane prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/22" xmlns:fx="http://javafx.com/fxml/1" fx:controller="edu.fxdemo.supermarketfx.controller.itemController">
    <children>
       <Label layoutX="225.0" layoutY="78.0" prefHeight="20.0" prefWidth="111.0" text="ITEM" textFill="#dc1111">
          <font>

@@ -8,7 +8,7 @@ import javafx.scene.layout.AnchorPane;
 
 import java.io.IOException;
 
-public class Page1 {
+public class dashController {
 
     @FXML
     private AnchorPane page1pane;
