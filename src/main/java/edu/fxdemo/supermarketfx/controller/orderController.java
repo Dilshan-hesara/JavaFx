@@ -158,7 +158,9 @@ public class orderController implements Initializable {
         loadCustomerIds();
         loadItemId();
 
-//
+//load order date
+        orderDate.setText(LocalDate.now().toString());
+
 
         // Clear selected customer, item, and their associated labels
         cmbCustomerId.getSelectionModel().clearSelection();
