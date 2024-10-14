@@ -1,6 +1,7 @@
 package edu.fxdemo.supermarketfx.controller;
 
 import edu.fxdemo.supermarketfx.dto.CustomerDto;
+import edu.fxdemo.supermarketfx.dto.ItemDto;
 import edu.fxdemo.supermarketfx.dto.TM.CartTM;
 import edu.fxdemo.supermarketfx.model.CustomerModel;
 import edu.fxdemo.supermarketfx.model.ItemModel;
@@ -72,7 +73,8 @@ public class orderController implements Initializable {
 
     private final CustomerModel customerModel = new CustomerModel();
     private final ItemModel itemModel = new ItemModel();
-    private final ObservableList<CartTM> cartTMS = FXCollections. observableArrayList();
+    private final ObservableList<CartTM> cartTMS = FXCollections.observableArrayList();
+
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
         setCellValues();
@@ -84,7 +86,10 @@ public class orderController implements Initializable {
             new Alert(Alert.AlertType.ERROR, "Fail to load data..!").show();
         }
 
+
+
     }
+
 
     private void setCellValues() {
         // Set up the table columns with property values from CartTM class
@@ -98,20 +103,9 @@ public class orderController implements Initializable {
         // Bind the cart items observable list to the TableView
         tblCart.setItems(cartTMS);
     }
-    @FXML
-    void btnAddToCartOnAction(ActionEvent event) {
 
-    }
 
-    @FXML
-    void btnPlaceOrderOnAction(ActionEvent event) {
 
-    }
-
-    @FXML
-    void btnResetOnAction(ActionEvent event) {
-
-    }
     /**
      * Load all item IDs into the item ComboBox.
      */
@@ -147,9 +141,20 @@ public class orderController implements Initializable {
     }
 
     @FXML
-    void cmbItemOnAction(ActionEvent event) {
+    void cmbItemOnAction(ActionEvent event) throws SQLException {
+        String selectedItemId = (String) cmbItemId.getSelectionModel().getSelectedItem();
+        ItemDto itemDTO = itemModel.findById(selectedItemId);
 
+        // If item found (itemDTO not null)
+        if (itemDTO != null) {
+
+            // FIll item related labels
+            lblItemName.setText(itemDTO.getItemName());
+            lblItemQty.setText(String.valueOf(itemDTO.getQuantity()));
+            lblItemPrice.setText(String.valueOf(itemDTO.getPrice()));
+        }
     }
+
     private void refreshPage() throws SQLException {
 
 
@@ -157,6 +162,7 @@ public class orderController implements Initializable {
         // Load customer and item IDs into ComboBoxes
         loadCustomerIds();
         loadItemId();
+
 
 //load order date
         orderDate.setText(LocalDate.now().toString());
@@ -177,5 +183,55 @@ public class orderController implements Initializable {
         // Refresh the table to reflect changes
         tblCart.refresh();
     }
+
+    @FXML
+    void btnAddToCartOnAction(ActionEvent event) {
+
+
+    }
+    @FXML
+    void btnPlaceOrderOnAction(ActionEvent event) {
+
+
+    }
+
+    @FXML
+    void btnResetOnAction(ActionEvent event) {
+
+    }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 }
