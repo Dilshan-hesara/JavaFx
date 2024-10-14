@@ -33,7 +33,6 @@ import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.stage.Stage;
-
 import java.util.Objects;
 
 public class Appinizelizer extends Application {
@@ -41,7 +40,7 @@ public class Appinizelizer extends Application {
     public void start(Stage stage) throws Exception {
 
         Parent root = FXMLLoader.load(Objects.requireNonNull(getClass().getResource("/view/page1.fxml")));
-        Scene scene = new Scene(root, 600, 400);
+        Scene scene = new Scene(FXMLLoader.load(Objects.requireNonNull(getClass().getResource("/view/page1.fxml"))));
         stage.setScene(scene);
 
         stage.setTitle("whf");

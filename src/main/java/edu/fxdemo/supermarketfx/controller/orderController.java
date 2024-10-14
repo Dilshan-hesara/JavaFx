@@ -1,20 +1,32 @@
 package edu.fxdemo.supermarketfx.controller;
 
+import edu.fxdemo.supermarketfx.dto.CustomerDto;
+import edu.fxdemo.supermarketfx.dto.TM.CartTM;
+import edu.fxdemo.supermarketfx.model.CustomerModel;
+import edu.fxdemo.supermarketfx.model.ItemModel;
+import javafx.collections.FXCollections;
+import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
-import javafx.scene.control.ComboBox;
-import javafx.scene.control.Label;
-import javafx.scene.control.TableColumn;
-import javafx.scene.control.TableView;
-import javafx.scene.control.TextField;
+import javafx.fxml.Initializable;
+import javafx.scene.control.*;
+import javafx.scene.control.cell.PropertyValueFactory;
 
-public class orderController {
+import java.net.URL;
+import java.sql.SQLException;
+import java.time.LocalDate;
+import java.util.ArrayList;
+import java.util.ResourceBundle;
+
+
+public class orderController implements Initializable {
+
 
     @FXML
-    private ComboBox<?> cmbCustomerId;
+    private ComboBox<String> cmbCustomerId;
 
     @FXML
-    private ComboBox<?> cmbItemId;
+    private ComboBox<String> cmbItemId;
 
     @FXML
     private TableColumn<?, ?> colAction;
@@ -53,11 +65,39 @@ public class orderController {
     private Label orderDate;
 
     @FXML
-    private TableView<?> tblCart;
+    private TableView<CartTM> tblCart;
 
     @FXML
     private TextField txtAddToCartQty;
 
+    private final CustomerModel customerModel = new CustomerModel();
+    private final ItemModel itemModel = new ItemModel();
+    private final ObservableList<CartTM> cartTMS = FXCollections. observableArrayList();
+    @Override
+    public void initialize(URL url, ResourceBundle resourceBundle) {
+        setCellValues();
+
+        // Load data and initialize the page
+        try {
+            refreshPage();
+        } catch (SQLException e) {
+            new Alert(Alert.AlertType.ERROR, "Fail to load data..!").show();
+        }
+
+    }
+
+    private void setCellValues() {
+        // Set up the table columns with property values from CartTM class
+        colItemId.setCellValueFactory(new PropertyValueFactory<>("itemId"));
+        colName.setCellValueFactory(new PropertyValueFactory<>("itemName"));
+        colQuantity.setCellValueFactory(new PropertyValueFactory<>("cartQuantity"));
+        colPrice.setCellValueFactory(new PropertyValueFactory<>("unitPrice"));
+        colTotal.setCellValueFactory(new PropertyValueFactory<>("total"));
+        colAction.setCellValueFactory(new PropertyValueFactory<>("removeBtn"));
+
+        // Bind the cart items observable list to the TableView
+        tblCart.setItems(cartTMS);
+    }
     @FXML
     void btnAddToCartOnAction(ActionEvent event) {
 
@@ -72,15 +112,68 @@ public class orderController {
     void btnResetOnAction(ActionEvent event) {
 
     }
+    /**
+     * Load all item IDs into the item ComboBox.
+     */
+    private void loadItemId() throws SQLException {
+        ArrayList<String> itemIds = itemModel.getAllItemIds();
+        ObservableList<String> observableList = FXCollections.observableArrayList();
+        observableList.addAll(itemIds);
+        cmbItemId.setItems(observableList);
+    }
 
+
+    /**
+     * Load all customer IDs into the customer ComboBox.
+     */
+    private void loadCustomerIds() throws SQLException {
+        ArrayList<String> customerIds = customerModel.getAllCustomerIds();
+        ObservableList<String> observableList = FXCollections.observableArrayList();
+        observableList.addAll(customerIds);
+        cmbCustomerId.setItems(observableList);
+    }
     @FXML
-    void cmbCustomerOnAction(ActionEvent event) {
+    void cmbCustomerOnAction(ActionEvent event) throws SQLException {
+        String selectedCustomerId = (String) cmbCustomerId.getSelectionModel().getSelectedItem();
+        CustomerDto customerDTO = customerModel.findById(selectedCustomerId);
+
+        // If customer found (customerDTO not null)
+        if (customerDTO != null) {
+
+            // FIll customer related labels
+            lblCustomerName.setText(customerDTO.getName());
+        }
 
     }
 
     @FXML
     void cmbItemOnAction(ActionEvent event) {
 
+    }
+    private void refreshPage() throws SQLException {
+
+
+
+        // Load customer and item IDs into ComboBoxes
+        loadCustomerIds();
+        loadItemId();
+
+//
+
+        // Clear selected customer, item, and their associated labels
+        cmbCustomerId.getSelectionModel().clearSelection();
+        cmbItemId.getSelectionModel().clearSelection();
+        lblItemName.setText("");
+        lblItemQty.setText("");
+        lblItemPrice.setText("");
+        txtAddToCartQty.setText("");
+        lblCustomerName.setText("");
+
+        // Clear the cart observable list
+        cartTMS.clear();
+
+        // Refresh the table to reflect changes
+        tblCart.refresh();
     }
 
 }

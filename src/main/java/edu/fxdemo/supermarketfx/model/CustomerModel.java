@@ -124,4 +124,31 @@ public class CustomerModel {
                 customerDTO.getCustomerId()
         );
     }
+
+    public CustomerDto findById(String selectedCusId) throws SQLException {
+        ResultSet rst = CrudUtil.execute("select * from customer where customer_id=?", selectedCusId);
+
+        if (rst.next()) {
+            return new CustomerDto(
+                    rst.getString(1),  // Customer ID
+                    rst.getString(2),  // Name
+                    rst.getString(3),  // NIC
+                    rst.getString(4),  // Email
+                    rst.getString(5)   // Phone
+            );
+        }
+        return null;
+    }
+
+    public ArrayList<String> getAllCustomerIds() throws SQLException {
+        ResultSet rst = CrudUtil.execute("select customer_id from customer");
+
+        ArrayList<String> customerIds = new ArrayList<>();
+
+        while (rst.next()) {
+            customerIds.add(rst.getString(1));
+        }
+
+        return customerIds;
+    }
 }
