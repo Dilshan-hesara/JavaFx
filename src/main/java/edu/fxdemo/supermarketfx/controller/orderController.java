@@ -2,9 +2,12 @@ package edu.fxdemo.supermarketfx.controller;
 
 import edu.fxdemo.supermarketfx.dto.CustomerDto;
 import edu.fxdemo.supermarketfx.dto.ItemDto;
+import edu.fxdemo.supermarketfx.dto.OrderDetailsDto;
+import edu.fxdemo.supermarketfx.dto.OrdersDto;
 import edu.fxdemo.supermarketfx.dto.TM.CartTM;
 import edu.fxdemo.supermarketfx.model.CustomerModel;
 import edu.fxdemo.supermarketfx.model.ItemModel;
+import edu.fxdemo.supermarketfx.model.OrderModel;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
@@ -14,6 +17,7 @@ import javafx.scene.control.*;
 import javafx.scene.control.cell.PropertyValueFactory;
 
 import java.net.URL;
+import java.sql.Date;
 import java.sql.SQLException;
 import java.time.LocalDate;
 import java.util.ArrayList;
@@ -73,6 +77,7 @@ public class orderController implements Initializable {
 
     private final CustomerModel customerModel = new CustomerModel();
     private final ItemModel itemModel = new ItemModel();
+    private final OrderModel orderModel = new OrderModel();
     private final ObservableList<CartTM> cartTMS = FXCollections.observableArrayList();
 
     @Override
@@ -158,6 +163,8 @@ public class orderController implements Initializable {
     private void refreshPage() throws SQLException {
 
 
+        // Get the next order ID and set it to the label
+        lblOrderId.setText(orderModel.getNextOrderId());
 
         // Load customer and item IDs into ComboBoxes
         loadCustomerIds();
@@ -250,8 +257,7 @@ public class orderController implements Initializable {
     }
 
     @FXML
-    void btnPlaceOrderOnAction(ActionEvent event) {
-
+    void btnPlaceOrderOnAction(ActionEvent event) throws SQLException {
 
     }
 
