@@ -186,7 +186,48 @@ public class orderController implements Initializable {
 
     @FXML
     void btnAddToCartOnAction(ActionEvent event) {
+        String selectedItemId = (String) cmbItemId.getSelectionModel().getSelectedItem();
 
+        String itemName = lblItemName.getText();
+        int cartQty = Integer.parseInt(lblItemQty.getText());
+        int qtyOnHand = Integer.parseInt(lblItemQty.getText());
+        txtAddToCartQty.setText("");
+
+        double unitPrice = Double.parseDouble(lblItemPrice.getText());
+        double total = unitPrice * cartQty;
+
+        for (CartTM cartTM : cartTMS) {
+            if (cartTM.getItemId().equals(selectedItemId)) {
+                int newQty = cartTM.getCartQuantity() + cartQty;
+                cartTM.setCartQuantity(newQty);
+                cartTM.setTotal(unitPrice * newQty);
+                tblCart.refresh();
+                return;
+            }
+
+        }
+// Create a "Remove" button for the item to allow it to be removed from the cart later.
+        Button btn = new Button("Remove");
+
+        CartTM newCartTM = new CartTM(
+                selectedItemId,
+                itemName,
+                cartQty,
+                unitPrice,
+                total,
+                btn
+        );
+        btn.setOnAction(actionEvent -> {
+
+            // Remove the item from the cart's observable list (cartTMS).
+            cartTMS.remove(newCartTM);
+
+            // Refresh the table to reflect the removal of the item.
+            tblCart.refresh();
+        });
+
+        // Add the newly created CartTM object to the cart's observable list.
+        cartTMS.add(newCartTM);
 
     }
     @FXML
