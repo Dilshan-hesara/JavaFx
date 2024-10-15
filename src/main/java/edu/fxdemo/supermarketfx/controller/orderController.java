@@ -201,7 +201,8 @@ public class orderController implements Initializable {
         }
 
         String itemName = lblItemName.getText();
-        int cartQty = Integer.parseInt(lblItemQty.getText());
+
+        int cartQty = Integer.parseInt(txtAddToCartQty.getText());
         int qtyOnHand = Integer.parseInt(lblItemQty.getText());
         // Check if there are enough items in stock; if not, show an error alert and return
         if (qtyOnHand < cartQty) {
@@ -258,6 +259,54 @@ public class orderController implements Initializable {
 
     @FXML
     void btnPlaceOrderOnAction(ActionEvent event) throws SQLException {
+        if (tblCart.getItems().isEmpty()) {
+            new Alert(Alert.AlertType.ERROR, "Please add items to cart..!").show();
+            return;
+        }
+        if (cmbCustomerId.getSelectionModel().isEmpty()) {
+            new Alert(Alert.AlertType.ERROR, "Please select customer for place order..!").show();
+            return;
+        }
+
+        String orderId = lblOrderId.getText();
+        Date dateOfOrder = Date.valueOf(orderDate.getText());
+        String customerId = cmbCustomerId.getValue();
+
+        ArrayList<OrderDetailsDto> orderDetailsDTOS = new ArrayList<>();
+
+        for (CartTM cartTM : cartTMS) {
+
+            // Create order details for each cart item
+            OrderDetailsDto orderDetailsDTO = new OrderDetailsDto(
+                    orderId,
+                    cartTM.getItemId(),
+                    cartTM.getCartQuantity(),
+                    cartTM.getUnitPrice()
+            );
+
+            // Add to order details array
+            orderDetailsDTOS.add(orderDetailsDTO);
+        }
+
+        // Create an OrderDTO with relevant order data
+        OrdersDto orderDTO = new OrdersDto(
+                orderId,
+                customerId,
+                dateOfOrder,
+                orderDetailsDTOS
+        );
+
+        boolean isSaved = orderModel.saveOrder(orderDTO);
+
+        if (isSaved) {
+            new Alert(Alert.AlertType.INFORMATION, "Order saved..!").show();
+
+            // Reset the page after placing the order
+            refreshPage();
+        } else {
+            new Alert(Alert.AlertType.ERROR, "Order fail..!").show();
+        }
+
 
     }
 

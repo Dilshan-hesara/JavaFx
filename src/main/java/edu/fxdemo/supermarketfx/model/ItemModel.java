@@ -1,6 +1,7 @@
 package edu.fxdemo.supermarketfx.model;
 
 import edu.fxdemo.supermarketfx.dto.ItemDto;
+import edu.fxdemo.supermarketfx.dto.OrderDetailsDto;
 import edu.fxdemo.supermarketfx.util.CrudUtil;
 
 import java.sql.ResultSet;
@@ -10,7 +11,7 @@ import java.util.ArrayList;
 public class ItemModel {
     public ArrayList<String> getAllItemIds() throws SQLException {
         // Execute SQL query to get all item IDs
-        ResultSet rst = CrudUtil.execute("select item_id from item");
+        ResultSet rst = CrudUtil.execute("SELECT item_id FROM item");
 
         // Create an ArrayList to store the item IDs
         ArrayList<String> itemIds = new ArrayList<>();
@@ -26,9 +27,9 @@ public class ItemModel {
 
     public ItemDto findById(String selectedItemId) throws SQLException {
         // Execute SQL query to find the item by ID
-        ResultSet rst = CrudUtil.execute("select * from item where item_id=?", selectedItemId);
+        ResultSet rst = CrudUtil.execute("SELECT * FROM item WHERE item_id=?", selectedItemId);
 
-        // If the item is found, create an ItemDTO object with the retrieved data
+        // If the item is found, create an ItemDto object with the retrieved data
         if (rst.next()) {
             return new ItemDto(
                     rst.getString(1),  // Item ID
@@ -38,7 +39,19 @@ public class ItemModel {
             );
         }
 
-        return null;
+        return null;  // Return null if the item is not found
     }
+
+    public boolean reduceQuantity(OrderDetailsDto orderDetailsDto) throws SQLException {
+        // Execute SQL query to update the item quantity in the database
+        return CrudUtil.execute(
+                "UPDATE item SET quantity = quantity - ? WHERE item_id = ?",
+                orderDetailsDto.getQuantity(),   // Quantity to reduce
+                orderDetailsDto.getItemId()      // Item ID
+        );
+    }
+
+
+
 
 }
