@@ -187,10 +187,22 @@ public class orderController implements Initializable {
     @FXML
     void btnAddToCartOnAction(ActionEvent event) {
         String selectedItemId = (String) cmbItemId.getSelectionModel().getSelectedItem();
+        // If no item is selected, show an error alert and return
+        if (selectedItemId == null) {
+            new Alert(Alert.AlertType.ERROR, "Please select item..!").show();
+            return; // Exit the method if no item is selected.
+        }
 
         String itemName = lblItemName.getText();
         int cartQty = Integer.parseInt(lblItemQty.getText());
         int qtyOnHand = Integer.parseInt(lblItemQty.getText());
+        // Check if there are enough items in stock; if not, show an error alert and return
+        if (qtyOnHand < cartQty) {
+            new Alert(Alert.AlertType.ERROR, "Not enough items..!").show();
+            return; // Exit the method if there's insufficient stock.
+        }
+
+        // Clear the text field for adding quantity after retrieving the input value.
         txtAddToCartQty.setText("");
 
         double unitPrice = Double.parseDouble(lblItemPrice.getText());
@@ -230,16 +242,19 @@ public class orderController implements Initializable {
         cartTMS.add(newCartTM);
 
     }
+
+
+    @FXML
+    void btnResetOnAction(ActionEvent event) throws SQLException {
+        refreshPage();
+    }
+
     @FXML
     void btnPlaceOrderOnAction(ActionEvent event) {
 
 
     }
 
-    @FXML
-    void btnResetOnAction(ActionEvent event) throws SQLException {
-        refreshPage();
-    }
 
 
 
