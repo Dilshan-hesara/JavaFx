@@ -237,8 +237,8 @@ public class orderController implements Initializable {
     }
 
     @FXML
-    void btnResetOnAction(ActionEvent event) {
-
+    void btnResetOnAction(ActionEvent event) throws SQLException {
+        refreshPage();
     }
 
 
