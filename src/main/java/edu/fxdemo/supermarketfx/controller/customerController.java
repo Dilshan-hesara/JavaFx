@@ -282,4 +282,9 @@ public class customerController implements Initializable {
         txtphone.setText("");
     }
 
+    @FXML
+    void getAllReport(ActionEvent event) {
+
+    }
+
 }
