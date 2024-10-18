@@ -1,5 +1,6 @@
 package edu.fxdemo.supermarketfx.controller;
 
+import edu.fxdemo.supermarketfx.db.DBConnection;
 import edu.fxdemo.supermarketfx.dto.CustomerDto;
 import edu.fxdemo.supermarketfx.dto.TM.CustomerTM;
 import edu.fxdemo.supermarketfx.model.CustomerModel;
@@ -11,8 +12,10 @@ import javafx.fxml.Initializable;
 import javafx.scene.control.*;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.input.MouseEvent;
-
+import net.sf.jasperreports.engine.*;
+import net.sf.jasperreports.view.JasperViewer;
 import java.net.URL;
+import java.sql.Connection;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.Optional;
@@ -285,6 +288,26 @@ public class customerController implements Initializable {
     @FXML
     void getAllReport(ActionEvent event) {
 
+     try {
+            JasperReport jasperReport = JasperCompileManager.compileReport(
+                    getClass()
+                            .getResourceAsStream("/report/customerRe.jrxml"
+                            ));
+            Connection connection = DBConnection.getInstance().getConnection();
+            JasperPrint jasperPrint = JasperFillManager.fillReport(
+                    jasperReport,
+                    null,
+                    connection
+            );
+            JasperViewer.viewReport(jasperPrint, false);
+        } catch (JRException e) {
+            new Alert(Alert.AlertType.ERROR, "Fail to generate report...!").show();
+//           e.printStackTrace();
+        } catch (SQLException e) {
+            new Alert(Alert.AlertType.ERROR, "DB error...!").show();
+        }
     }
 
-}
+
+    }
+
