@@ -65,32 +65,71 @@ public class customerController implements Initializable {
     @FXML
     private TextField txtphone;
 
+
+
     @FXML
     void savebutt(ActionEvent event) throws SQLException {
+
+
         String customerId = txtid.getText();
         String name = txtname.getText();
         String nic = txtnic.getText();
         String email = txtmail.getText();
         String phone = txtphone.getText();
-        CustomerDto customerDTO = new CustomerDto(
-                customerId,
-                name,
-                nic,
-                email,
-                phone
-        );
-        boolean isSaved = customerModel.saveCustomer(customerDTO);
-        if (isSaved) {
-            loadNextCustomerId();
-            txtname.setText("");
-            txtnic.setText("");
-            txtmail.setText("");
-            txtphone.setText("");
-            loadCustomerTable();
-            new Alert(Alert.AlertType.INFORMATION, "Customer saved...!").show();
-        } else {
-            new Alert(Alert.AlertType.ERROR, "Fail to save customer...!").show();
+
+
+        txtname.setStyle(txtname.getStyle()+";-fx-border-color: #7367F0;");
+        txtnic.setStyle(txtnic.getStyle()+";-fx-border-color: #7367F0;");
+        txtmail.setStyle(txtmail.getStyle()+";-fx-border-color: #7367F0;");
+        txtphone.setStyle(txtphone.getStyle()+";-fx-border-color: #7367F0;");
+
+        String namePattern = "^[A-Za-z ]+$";
+        String nicPattern = "^[0-9]{9}[vVxX]||[0-9]{12}$";
+        String emailPattern = "^[\\w!#$%&'*+/=?`{|}~^-]+(?:\\.[\\w!#$%&'*+/=?`{|}~^-]+)*@(?:[a-zA-Z0-9-]+\\.)+[a-zA-Z]{2,6}$";
+        String phonePattern = "^(\\d+)||((\\d+\\.)(\\d){2})$";
+
+        boolean isValidName = name.matches(namePattern);
+        boolean isValidNic = nic.matches(nicPattern);
+        boolean isValidEmail = email.matches(emailPattern);
+        boolean isValidPhone = phone.matches(phonePattern);
+
+        if (!isValidName){
+            System.out.println(txtname.getStyle());
+            txtname.setStyle(txtname.getStyle()+";-fx-border-color: red;");
+            System.out.println("Invalid name.............");
+//            return;
         }
+
+        if (!isValidNic){
+            txtnic.setStyle(txtnic.getStyle()+";-fx-border-color: red;");
+//            return;
+        }
+
+        if (!isValidEmail){
+            txtmail.setStyle(txtmail.getStyle()+";-fx-border-color: red;");
+        }
+
+        if (!isValidPhone){
+            txtphone.setStyle(txtphone.getStyle()+";-fx-border-color: red;");
+        }
+        if (isValidName && isValidNic && isValidEmail && isValidPhone){
+            CustomerDto customerDTO = new CustomerDto(
+                    customerId,
+                    name,
+                    nic,
+                    email,
+                    phone
+            );
+
+            boolean isSaved = customerModel.saveCustomer(customerDTO);
+            if (isSaved) {
+                refreshPage();
+                new Alert(Alert.AlertType.INFORMATION, "Customer saved...!").show();
+            } else {
+                new Alert(Alert.AlertType.ERROR, "Fail to save customer...!").show();
+            }
+        }
+
     }
 
 
