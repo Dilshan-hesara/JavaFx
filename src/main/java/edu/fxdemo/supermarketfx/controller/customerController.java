@@ -327,10 +327,10 @@ public class customerController implements Initializable {
         FXMLLoader loader = new FXMLLoader(getClass().getResource("/view/sendMail.fxml"));
         Parent load = loader.load();
 
-        sendMailConroller sendMailConroller =loader.getController();
+       // sendMailConroller sendMailConroller =loader.getController();
 
-        String email = customerTM.getCustEmail();
-        sendMailConroller.customerEmail = email;
+      //  String email = customerTM.getCustEmail();
+      //  sendMailConroller.customerEmail = email;
 
        Stage stage = new Stage();
        stage.setScene(new Scene(load));
